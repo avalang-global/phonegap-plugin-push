@@ -278,6 +278,14 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
             }
             gCachedExtras.clear();
           }
+          Bundle bundle = cordova.getActivity().getIntent().getExtras();
+          if (bundle != null) {
+            PushPlugin.sendEvent(convertBundleToJson(bundle));
+            for (String key : bundle.keySet()) {
+              Log.i("EXTRAS: ", key + " : " + (bundle.get(key) != null ? bundle.get(key) : "NULL"));
+              cordova.getActivity().getIntent().removeExtra(key);
+            }
+          }
         }
       });
     } else if (UNREGISTER.equals(action)) {
