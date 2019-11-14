@@ -481,6 +481,7 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
       } else if (!"1".equals(noCache)) {
         Log.v(LOG_TAG, "sendExtras: caching extras to send at a later time.");
         gCachedExtras.add(extras);
+        sendEvent(convertBundleToJson(extras));
       }
     }
   }
