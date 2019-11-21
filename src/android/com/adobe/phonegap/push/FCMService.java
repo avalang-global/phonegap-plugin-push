@@ -120,11 +120,15 @@ public class FCMService extends FirebaseMessagingService implements PushConstant
       }
       // if we are not in the foreground always send notification if the data has at least a message or title
       else {
-        Log.d(LOG_TAG, "background");
+        /*Log.d(LOG_TAG, "background");
         extras.putBoolean(FOREGROUND, false);
         extras.putBoolean(COLDSTART, PushPlugin.isActive());
 
-        showNotificationIfPossible(applicationContext, extras);
+        showNotificationIfPossible(applicationContext, extras);*/
+
+        extras.putBoolean(FOREGROUND, true);
+        extras.putBoolean(COLDSTART, false);
+        PushPlugin.sendExtras(extras);
       }
     }
   }
