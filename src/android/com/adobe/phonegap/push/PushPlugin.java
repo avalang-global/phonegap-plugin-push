@@ -281,6 +281,8 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
           Bundle bundle = cordova.getActivity().getIntent().getExtras();
           if (bundle != null) {
             if (bundle.size() > 1) {
+              bundle.putBoolean(FOREGROUND, false);
+              bundle.putBoolean(COLDSTART, true);
               PushPlugin.sendEvent(convertBundleToJson(bundle));
             }
             for (String key : bundle.keySet()) {
