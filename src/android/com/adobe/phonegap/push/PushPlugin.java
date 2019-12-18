@@ -271,23 +271,21 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
           if (!gCachedExtras.isEmpty()) {
             Log.v(LOG_TAG, "sending cached extras");
             synchronized (gCachedExtras) {
-              Iterator<Bundle> gCachedExtrasIterator = gCachedExtras.iterator();
-              while (gCachedExtrasIterator.hasNext()) {
-                sendExtras(gCachedExtrasIterator.next());
-              }
+              sendExtras(gCachedExtras.get(gCachedExtras.size() - 1));
             }
             gCachedExtras.clear();
-          }
-          Bundle bundle = cordova.getActivity().getIntent().getExtras();
-          if (bundle != null) {
-            if (bundle.size() > 1) {
-              bundle.putBoolean(FOREGROUND, false);
-              bundle.putBoolean(COLDSTART, true);
-              PushPlugin.sendEvent(convertBundleToJson(bundle));
-            }
-            for (String key : bundle.keySet()) {
-              Log.w("EXTRAS>: ", key + " : " + (bundle.get(key) != null ? bundle.get(key) : "NULL"));
-              cordova.getActivity().getIntent().removeExtra(key);
+          } else {
+            Bundle bundle = cordova.getActivity().getIntent().getExtras();
+            if (bundle != null) {
+              if (bundle.size() > 1) {
+                bundle.putBoolean(FOREGROUND, false);
+                bundle.putBoolean(COLDSTART, true);
+                PushPlugin.sendEvent(convertBundleToJson(bundle));
+              }
+              for (String key : bundle.keySet()) {
+                Log.w("EXTRAS>: ", key + " : " + (bundle.get(key) != null ? bundle.get(key) : "NULL"));
+                cordova.getActivity().getIntent().removeExtra(key);
+              }
             }
           }
         }
