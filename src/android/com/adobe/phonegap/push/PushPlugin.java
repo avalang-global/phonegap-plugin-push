@@ -34,6 +34,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import me.leolin.shortcutbadger.ShortcutBadger;
 
