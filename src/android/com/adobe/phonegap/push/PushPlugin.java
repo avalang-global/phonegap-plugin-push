@@ -445,6 +445,8 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
           }
         }
       });
+    } else if (GET_NOTIFICATION.equals(action)) {
+      getNotification();
     } else {
       Log.e(LOG_TAG, "Invalid action : " + action);
       callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.INVALID_ACTION));
@@ -452,6 +454,27 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
     }
 
     return true;
+  }
+
+  private void getNotification() {
+    Bundle extras = this.cordova.getActivity().getIntent().getExtras();
+    Log.v(LOG_TAG, "GET_NOTIFICATION"+extras);
+    if (extras != null) {
+      JSONObject json = new JSONObject();
+      Set<String> keys = extras.keySet();
+      for (String key : keys) {
+        try {
+          Log.v(LOG_TAG, key+": "+extras.get(key));
+          json.put(key, JSONObject.wrap(extras.get(key)));
+        } catch(JSONException e) {
+        }
+      }
+      PluginResult pluginResult = new PluginResult(PluginResult.Status.OK,json);
+      pluginResult.setKeepCallback(true);
+      if (pushContext != null) {
+        pushContext.sendPluginResult(pluginResult);
+      }
+    }
   }
 
   public static void sendEvent(JSONObject _json) {
@@ -533,6 +556,7 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
   public void onResume(boolean multitasking) {
     super.onResume(multitasking);
     gForeground = true;
+    getNotification();
   }
 
   @Override
